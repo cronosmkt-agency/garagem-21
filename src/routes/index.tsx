@@ -4,7 +4,7 @@ import {
   Car, ShieldCheck, Award, Star, Clock, MapPin, Phone, MessageCircle,
   ChevronDown, ArrowRight, Menu, X, Check, ExternalLink, KeyRound,
   Sparkles, SlidersHorizontal, Calculator, FileCheck, DollarSign,
-  TrendingUp, CheckCircle2, Navigation
+  TrendingUp, CheckCircle2, Navigation, Eye, Fuel, Gauge, CheckCircle
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -15,6 +15,20 @@ export default function Garagem21LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
   const [selectedCategory, setSelectedCategory] = useState<string>("todos");
+  const [selectedVehicleModal, setSelectedVehicleModal] = useState<{
+    id: string;
+    category: string;
+    name: string;
+    year: string;
+    km: string;
+    price: string;
+    tag: string;
+    image: string;
+    imageFallback: string;
+    transmission: string;
+    fuel: string;
+    specs: string[];
+  } | null>(null);
 
   // Finance & Trade-in Simulator State
   const [clientName, setClientName] = useState("");
@@ -50,58 +64,116 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
 
   const showroomVehicles = [
     {
+      id: "compass",
       category: "suv",
       name: "Jeep Compass Limited 1.3 Turbo Flex",
       year: "2023 / 2023",
       km: "24.000 km",
       price: "R$ 159.900",
       tag: "Laudo 100% Aprovado",
-      specs: ["Automático", "Bancos em Couro", "Teto Solar", "Único Dono"]
+      image: "/cars/jeep-compass.webp",
+      imageFallback: "/cars/jeep-compass.jpg",
+      transmission: "Automático 6M",
+      fuel: "Flex Turbo",
+      specs: ["Bancos em Couro", "Teto Solar Panorâmico", "Painel Full Digital", "Único Dono", "Piloto Adaptativo"]
     },
     {
+      id: "corolla-cross",
       category: "suv",
       name: "Toyota Corolla Cross XRE 2.0 Dynamic Force",
       year: "2022 / 2023",
       km: "31.000 km",
       price: "R$ 144.900",
-      tag: "Revisões na Concessionária",
-      specs: ["Câmbio Direct Shift", "Chave Presencial", "Multimídia 9 pol", "Garantia"]
+      tag: "Revisões em Concessionária",
+      image: "/cars/corolla-cross.webp",
+      imageFallback: "/cars/corolla-cross.jpg",
+      transmission: "Direct Shift CVT",
+      fuel: "Flex 177cv",
+      specs: ["Chave Presencial Smart Entry", "Multimídia 9 pol", "Faróis Full LED", "Garantia Toyota", "7 Airbags"]
     },
     {
+      id: "honda-hrv",
+      category: "suv",
+      name: "Honda HR-V Touring 1.5 Turbo Flex",
+      year: "2021 / 2022",
+      km: "35.000 km",
+      price: "R$ 138.900",
+      tag: "Procedência Impecável",
+      image: "/cars/honda-hrv.webp",
+      imageFallback: "/cars/honda-hrv.jpg",
+      transmission: "Automático CVT",
+      fuel: "Turbo 173cv",
+      specs: ["Teto Solar Elétrico", "Bancos em Couro Claro", "Honda LaneWatch", "Sensores Diant/Tras", "Manual e Chave Reserva"]
+    },
+    {
+      id: "hilux",
       category: "picape",
       name: "Toyota Hilux SRX 2.8 4x4 Diesel Turbo",
       year: "2022 / 2022",
       km: "42.000 km",
       price: "R$ 248.900",
       tag: "Selo Collection",
-      specs: ["Tração 4x4 com Reduzida", "Som JBL Premium", "Faróis Full LED", "Impecável"]
+      image: "/cars/hilux-srx.webp",
+      imageFallback: "/cars/hilux-srx.jpg",
+      transmission: "Automático 6M",
+      fuel: "Diesel 4x4",
+      specs: ["Tração 4x4 com Reduzida", "Som JBL Premium", "Câmera 360 Graus", "Faróis Full LED", "Capota Marítima"]
     },
     {
+      id: "bmw-320i",
       category: "sedan",
-      name: "Honda Civic Touring 1.5 Turbo Touring",
-      year: "2021 / 2021",
-      km: "38.000 km",
-      price: "R$ 139.900",
-      tag: "Laudo 100% Aprovado",
-      specs: ["Motor Turbo 173cv", "LaneWatch", "Teto Solar Elétrico", "Estado de 0km"]
+      name: "BMW 320i M Sport GP 2.0 Turbo ActiveFlex",
+      year: "2022 / 2023",
+      km: "26.000 km",
+      price: "R$ 249.900",
+      tag: "Selo Collection",
+      image: "/cars/bmw-320i.webp",
+      imageFallback: "/cars/bmw-320i.jpg",
+      transmission: "Steptronic 8M",
+      fuel: "Turbo 184cv",
+      specs: ["Pacote M Sport Completo", "Live Cockpit Professional", "Teto Solar", "Couro Vernasca", "Pinças M Sport"]
     },
     {
+      id: "corolla-altis",
       category: "sedan",
       name: "Toyota Corolla Altis Premium Hybrid",
       year: "2023 / 2024",
       km: "18.000 km",
       price: "R$ 168.900",
       tag: "Máxima Economia",
-      specs: ["Híbrido Flex", "Piloto Automático Adaptativo", "IPVA Reduzido", "Manual e Chave Reserva"]
+      image: "/cars/corolla-altis.webp",
+      imageFallback: "/cars/corolla-altis.jpg",
+      transmission: "Hybrid Transaxle",
+      fuel: "Híbrido Flex",
+      specs: ["Piloto Automático Adaptativo", "IPVA com Desconto Verde", "Toyota Safety Sense", "Garantia Baterias"]
     },
     {
+      id: "civic",
+      category: "sedan",
+      name: "Honda Civic Touring 1.5 Turbo Touring",
+      year: "2021 / 2021",
+      km: "38.000 km",
+      price: "R$ 139.900",
+      tag: "Laudo 100% Aprovado",
+      image: "/cars/civic-touring.webp",
+      imageFallback: "/cars/civic-touring.jpg",
+      transmission: "Automático CVT",
+      fuel: "Gasolina Turbo",
+      specs: ["Motor Turbo 173cv", "LaneWatch", "Teto Solar Elétrico", "Som 450W com Subwoofer", "Estado de 0km"]
+    },
+    {
+      id: "polo",
       category: "hatch",
       name: "Volkswagen Polo Highline 200 TSI",
       year: "2023 / 2023",
       km: "22.000 km",
       price: "R$ 96.900",
       tag: "Custo-Benefício",
-      specs: ["Painel Digital Active Info", "Câmbio Automático 6M", "Rodas 17 pol", "Revisado"]
+      image: "/cars/polo-tsi.webp",
+      imageFallback: "/cars/polo-tsi.jpg",
+      transmission: "Automático 6M",
+      fuel: "Flex TSI",
+      specs: ["Painel Digital Active Info", "Ar Climatronic Touch", "Rodas 17 pol diamantadas", "Revisões em Dia"]
     }
   ];
 
@@ -112,7 +184,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
   const pillars = [
     {
       icon: Star,
-      title: "⭐ 5,0 com 231 Avaliações no Google",
+      title: "5,0 com 231 Avaliações no Google",
       desc: "Um recorde histórico de credibilidade unânime em Teresópolis e toda a Região Serrana. A loja de seminovos mais bem avaliada pelos clientes."
     },
     {
@@ -123,7 +195,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
     {
       icon: KeyRound,
       title: "Confiança que Vende à Distância",
-      desc: "Histórias reais de clientes que compram 'sem ver o carro presencialmente', confiando integralmente na palavra e honestidade do Sr. Alexandre."
+      desc: "Histórias reais de clientes que compram sem ver o carro presencialmente, confiando integralmente na palavra e honestidade do Sr. Alexandre."
     },
     {
       icon: TrendingUp,
@@ -186,7 +258,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
             <span className="font-medium text-[#FDE68A]">
               Garagem 21 Collection:
             </span>
-            <span className="text-[#D1D5DB]">
+            <span className="text-[#D1D5DB] flex items-center gap-1">
               Mais de 230 avaliações 5 estrelas unânimes no Google Maps.
             </span>
           </div>
@@ -208,7 +280,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           {/* Logo EXCLUSIVAMENTE Tipográfica SEM NENHUM ÍCONE */}
           <a href="#" className="group flex flex-col transition-opacity hover:opacity-90">
-            <span className="font-['Outfit',sans-serif] text-xl font-extrabold tracking-tight text-white sm:text-2xl">
+            <span className="font-[Outfit,sans-serif] text-xl font-extrabold tracking-tight text-white sm:text-2xl">
               Garagem 21 <span className="bg-gradient-to-r from-[#FDE68A] via-[#D4AF37] to-[#B45309] bg-clip-text text-transparent">Collection</span>
             </span>
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase sm:text-[11px]">
@@ -351,10 +423,12 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
             <div className="lg:col-span-7">
               <div className="inline-flex items-center gap-2.5 rounded-full border border-[#D4AF37]/40 bg-[#181820]/90 px-4 py-1.5 text-xs font-bold text-[#FDE68A] shadow-lg shadow-[#D4AF37]/5">
                 <span className="flex h-2 w-2 rounded-full bg-[#D4AF37] animate-ping"></span>
-                Recorde Histórico: ⭐ 5,0 no Google com 231 Avaliações Reais
+                <span className="flex items-center gap-1">
+                  Recorde Histórico: <Star className="h-3.5 w-3.5 fill-[#D4AF37] text-[#D4AF37]" /> 5,0 no Google com 231 Avaliações Reais
+                </span>
               </div>
 
-              <h1 className="mt-6 font-['Outfit',sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl sm:leading-[1.12]">
+              <h1 className="mt-6 font-[Outfit,sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl sm:leading-[1.12]">
                 A concessionária mais confiável de Teresópolis.{" "}
                 <span className="bg-gradient-to-r from-[#FDE68A] via-[#D4AF37] to-[#EAB308] bg-clip-text text-transparent">
                   Seminovos com laudo 100% aprovado.
@@ -372,7 +446,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                   className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#EAB308] to-[#B45309] px-7 py-4 text-sm sm:text-base font-extrabold text-[#09090B] shadow-xl shadow-[#D4AF37]/25 transition-all hover:scale-[1.02] active:scale-95"
                 >
                   <Car className="h-5 w-5 text-[#09090B]" />
-                  Ver Veículos Disponíveis
+                  Ver Veículos Disponíveis com Foto
                 </a>
                 <a
                   href="#simulador"
@@ -397,7 +471,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
               </div>
             </div>
 
-            {/* Right Card / Gold Trimmed Showroom Cockpit */}
+            {/* Right Card / Gold Trimmed Showroom Cockpit WITH VEHICLE PHOTOS */}
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl border border-[#D4AF37]/40 bg-gradient-to-b from-[#181820] to-[#0D0D11] p-6 sm:p-8 shadow-2xl shadow-black/80">
                 <div className="flex items-center justify-between border-b border-[#D4AF37]/20 pb-4">
@@ -405,7 +479,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                     <span className="text-[10px] font-extrabold tracking-[0.2em] text-[#D4AF37] uppercase">
                       Selo de Garantia Collection
                     </span>
-                    <h3 className="font-['Outfit',sans-serif] text-lg font-bold text-white">
+                    <h3 className="font-[Outfit,sans-serif] text-lg font-bold text-white">
                       Rua Tenente Luiz Meirelles, 540
                     </h3>
                   </div>
@@ -416,42 +490,60 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                 </div>
 
                 <div className="mt-5 space-y-3.5">
-                  <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#09090B]/80 p-4 transition-all hover:border-[#D4AF37]/50">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-white">Jeep Compass Limited Turbo</span>
-                          <span className="rounded-md bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-black text-[#09090B] uppercase">Destaque</span>
-                        </div>
-                        <p className="mt-1 text-xs text-[#A1A1AA]">
-                          2023 · 24.000km · Teto solar, couro e laudo cautelar 100% limpo.
-                        </p>
+                  {/* Mini Card 1: Jeep Compass */}
+                  <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#09090B]/80 p-3.5 transition-all hover:border-[#D4AF37]/50 flex items-center gap-3.5">
+                    <img
+                      src="/cars/jeep-compass.webp"
+                      alt="Jeep Compass Limited"
+                      className="w-20 h-14 object-cover rounded-xl border border-[#D4AF37]/25 shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-white truncate">Jeep Compass Limited</span>
+                        <span className="rounded-md bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-black text-[#09090B] uppercase shrink-0">Destaque</span>
                       </div>
-                      <span className="text-xs font-extrabold text-[#FDE68A] shrink-0">R$ 159.900</span>
+                      <p className="mt-0.5 text-xs text-[#A1A1AA] truncate">
+                        2023 · 24.000km · Teto solar & couro
+                      </p>
+                      <span className="text-xs font-extrabold text-[#FDE68A]">R$ 159.900</span>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#09090B]/80 p-4 transition-all hover:border-[#D4AF37]/50">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <span className="font-bold text-sm text-white">Toyota Hilux SRX 4x4 Diesel</span>
-                        <p className="mt-1 text-xs text-[#A1A1AA]">
-                          2022 · 42.000km · Sistema JBL, tração integral e procedência atestada.
-                        </p>
+                  {/* Mini Card 2: Toyota Hilux */}
+                  <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#09090B]/80 p-3.5 transition-all hover:border-[#D4AF37]/50 flex items-center gap-3.5">
+                    <img
+                      src="/cars/hilux-srx.webp"
+                      alt="Toyota Hilux SRX"
+                      className="w-20 h-14 object-cover rounded-xl border border-[#D4AF37]/25 shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-white truncate">Toyota Hilux SRX 4x4</span>
+                        <span className="rounded-md bg-[#D4AF37]/20 border border-[#D4AF37]/40 px-1.5 py-0.5 text-[9px] font-bold text-[#FDE68A] uppercase shrink-0">Diesel</span>
                       </div>
-                      <span className="text-xs font-extrabold text-[#FDE68A] shrink-0">R$ 248.900</span>
+                      <p className="mt-0.5 text-xs text-[#A1A1AA] truncate">
+                        2022 · 42.000km · Sistema JBL & LED
+                      </p>
+                      <span className="text-xs font-extrabold text-[#FDE68A]">R$ 248.900</span>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#09090B]/80 p-4 transition-all hover:border-[#D4AF37]/50">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <span className="font-bold text-sm text-white">Toyota Corolla Altis Premium Hybrid</span>
-                        <p className="mt-1 text-xs text-[#A1A1AA]">
-                          2023 · 18.000km · Tecnologia híbrida, piloto adaptativo e garantia.
-                        </p>
+                  {/* Mini Card 3: BMW 320i */}
+                  <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#09090B]/80 p-3.5 transition-all hover:border-[#D4AF37]/50 flex items-center gap-3.5">
+                    <img
+                      src="/cars/bmw-320i.webp"
+                      alt="BMW 320i M Sport"
+                      className="w-20 h-14 object-cover rounded-xl border border-[#D4AF37]/25 shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-white truncate">BMW 320i M Sport GP</span>
+                        <span className="rounded-md bg-gradient-to-r from-[#D4AF37] to-[#B45309] px-1.5 py-0.5 text-[9px] font-black text-[#09090B] uppercase shrink-0">Collection</span>
                       </div>
-                      <span className="text-xs font-extrabold text-[#FDE68A] shrink-0">R$ 168.900</span>
+                      <p className="mt-0.5 text-xs text-[#A1A1AA] truncate">
+                        2022 · 26.000km · Pacote M Sport
+                      </p>
+                      <span className="text-xs font-extrabold text-[#FDE68A]">R$ 249.900</span>
                     </div>
                   </div>
                 </div>
@@ -479,15 +571,15 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid grid-cols-2 gap-6 text-center lg:grid-cols-4">
             <div className="p-2">
-              <span className="font-['Outfit',sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
-                ⭐ 5,0
+              <span className="font-[Outfit,sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37] flex items-center justify-center gap-1.5">
+                <Star className="h-6 w-6 sm:h-8 sm:w-8 fill-[#D4AF37] text-[#D4AF37]" /> 5,0
               </span>
               <p className="mt-1 text-xs sm:text-sm font-medium text-[#D1D5DB]">
                 231 Avaliações 5 Estrelas no Google
               </p>
             </div>
             <div className="p-2">
-              <span className="font-['Outfit',sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
+              <span className="font-[Outfit,sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
                 100%
               </span>
               <p className="mt-1 text-xs sm:text-sm font-medium text-[#D1D5DB]">
@@ -495,7 +587,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
               </p>
             </div>
             <div className="p-2">
-              <span className="font-['Outfit',sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
+              <span className="font-[Outfit,sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
                 4ª Compra
               </span>
               <p className="mt-1 text-xs sm:text-sm font-medium text-[#D1D5DB]">
@@ -503,7 +595,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
               </p>
             </div>
             <div className="p-2">
-              <span className="font-['Outfit',sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
+              <span className="font-[Outfit,sans-serif] text-2xl sm:text-4xl font-extrabold text-[#D4AF37]">
                 +10 Bancos
               </span>
               <p className="mt-1 text-xs sm:text-sm font-medium text-[#D1D5DB]">
@@ -521,7 +613,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
             <span className="text-xs font-extrabold tracking-[0.2em] text-[#D4AF37] uppercase">
               Por que nos escolher
             </span>
-            <h2 className="mt-2 font-['Outfit',sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-2 font-[Outfit,sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
               A Autoridade Definitiva em Seminovos
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[#A1A1AA]">
@@ -540,7 +632,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#D4AF37]/15 text-[#D4AF37] transition-colors group-hover:bg-[#D4AF37] group-hover:text-[#09090B]">
                     <IconComp className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-6 font-['Outfit',sans-serif] text-lg font-bold text-white">
+                  <h3 className="mt-6 font-[Outfit,sans-serif] text-lg font-bold text-white">
                     {pillar.title}
                   </h3>
                   <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#D1D5DB]">
@@ -553,18 +645,18 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
         </div>
       </section>
 
-      {/* 6. SHOWROOM / ESTOQUE DE SEMINOVOS SELECIONADOS */}
+      {/* 6. SHOWROOM / ESTOQUE DE SEMINOVOS COM FOTOS REAIS */}
       <section id="estoque" className="border-t border-[#D4AF37]/20 bg-[#0D0D11] py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-extrabold tracking-[0.2em] text-[#D4AF37] uppercase">
-              Showroom Collection
+              Showroom Collection com Fotos Reais
             </span>
-            <h2 className="mt-2 font-['Outfit',sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-2 font-[Outfit,sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
               Estoque Selecionado a Dedo
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[#A1A1AA]">
-              Veículos periciados com laudo cautelar em mãos, baixa quilometragem e procedência checada.
+              Veículos periciados com laudo cautelar em mãos, fotos reais em alta definição, baixa quilometragem e procedência checada.
             </p>
 
             {/* Category Filter Tabs */}
@@ -591,62 +683,109 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
             </div>
           </div>
 
-          {/* Grid of Vehicles */}
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredShowroom.map((car, idx) => (
+          {/* Grid of Vehicles WITH ENHANCED HIGH-RES PHOTOS */}
+          <div className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredShowroom.map((car) => (
               <div
-                key={idx}
-                className="group relative flex flex-col justify-between rounded-3xl border border-[#D4AF37]/30 bg-[#121216] p-6 sm:p-7 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-2xl hover:shadow-[#D4AF37]/15"
+                key={car.id}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-[#121216] shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-[#D4AF37] hover:shadow-2xl hover:shadow-[#D4AF37]/20"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-full bg-[#D4AF37]/15 px-3 py-1 text-[10px] font-extrabold text-[#FDE68A] border border-[#D4AF37]/30 uppercase tracking-wider">
-                      {car.tag}
-                    </span>
-                    <span className="text-xs font-semibold text-[#A1A1AA]">{car.year}</span>
-                  </div>
+                  {/* Photo Container 16:9 with Badges */}
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#09090B]">
+                    <img
+                      src={car.image}
+                      alt={car.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = car.imageFallback;
+                      }}
+                      className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#121216] via-transparent to-black/30 pointer-events-none" />
 
-                  <h3 className="mt-4 font-['Outfit',sans-serif] text-xl font-bold text-white group-hover:text-[#D4AF37] transition-colors">
-                    {car.name}
-                  </h3>
-
-                  <div className="mt-3 flex items-center gap-3 text-xs text-[#D1D5DB]">
-                    <span className="flex items-center gap-1 font-semibold text-[#D4AF37]">
-                      <Clock className="h-3.5 w-3.5" />
-                      {car.km}
-                    </span>
-                    <span className="h-1 w-1 rounded-full bg-[#A1A1AA]"></span>
-                    <span>Laudo Aprovado</span>
-                  </div>
-
-                  {/* Specs Pills */}
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {car.specs.map((spec, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="rounded-lg bg-[#09090B] px-2.5 py-1 text-[11px] font-medium text-[#D1D5DB] border border-[#D4AF37]/15"
-                      >
-                        {spec}
+                    {/* Tag Badge Top Left */}
+                    <div className="absolute top-3 left-3">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#09090B]/90 backdrop-blur-md px-2.5 py-1 text-[10px] font-extrabold text-[#FDE68A] border border-[#D4AF37]/40 uppercase tracking-wider shadow-md">
+                        <ShieldCheck className="h-3 w-3 text-[#D4AF37]" />
+                        {car.tag}
                       </span>
-                    ))}
+                    </div>
+
+                    {/* Year Badge Top Right */}
+                    <div className="absolute top-3 right-3">
+                      <span className="rounded-lg bg-[#09090B]/90 backdrop-blur-md px-2 py-0.5 text-[11px] font-bold text-white border border-white/10 shadow-md">
+                        {car.year}
+                      </span>
+                    </div>
+
+                    {/* Quick View Button on Image Hover */}
+                    <button
+                      onClick={() => setSelectedVehicleModal(car)}
+                      className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-lg bg-[#09090B]/90 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-[#D4AF37] border border-[#D4AF37]/40 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#D4AF37] hover:text-[#09090B]"
+                      aria-label="Ver fotos e ficha técnica"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      Ver Ficha
+                    </button>
+                  </div>
+
+                  {/* Car Content Body */}
+                  <div className="p-5 sm:p-6">
+                    <h3
+                      onClick={() => setSelectedVehicleModal(car)}
+                      className="font-[Outfit,sans-serif] text-base sm:text-lg font-bold text-white group-hover:text-[#D4AF37] transition-colors cursor-pointer leading-snug"
+                    >
+                      {car.name}
+                    </h3>
+
+                    {/* Specs Row: KM + Fuel + Transmission */}
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-[#D1D5DB] border-y border-[#D4AF37]/15 py-2.5">
+                      <span className="flex items-center gap-1.5 font-semibold text-[#D4AF37]">
+                        <Clock className="h-3.5 w-3.5 shrink-0" />
+                        {car.km}
+                      </span>
+                      <span className="flex items-center gap-1.5 text-[#E2E8F0]">
+                        <Gauge className="h-3.5 w-3.5 text-[#D4AF37] shrink-0" />
+                        {car.transmission}
+                      </span>
+                    </div>
+
+                    {/* Features Tags */}
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {car.specs.slice(0, 3).map((spec, sIdx) => (
+                        <span
+                          key={sIdx}
+                          className="rounded-md bg-[#09090B] px-2 py-0.5 text-[10px] font-medium text-[#A1A1AA] border border-[#D4AF37]/10"
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                      {car.specs.length > 3 && (
+                        <span className="rounded-md bg-[#09090B] px-1.5 py-0.5 text-[10px] font-medium text-[#D4AF37] border border-[#D4AF37]/20">
+                          +{car.specs.length - 3}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-[#D4AF37]/20 flex items-center justify-between">
+                {/* Card Footer: Price & WhatsApp Action */}
+                <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-[#D4AF37]/15 flex items-center justify-between bg-[#0e0e13]">
                   <div>
-                    <span className="text-[10px] text-[#A1A1AA] block uppercase tracking-wider">Valor À Vista</span>
-                    <span className="font-['Outfit',sans-serif] text-2xl font-extrabold text-[#D4AF37]">
+                    <span className="text-[9px] text-[#A1A1AA] block uppercase tracking-wider font-semibold">Valor À Vista</span>
+                    <span className="font-[Outfit,sans-serif] text-lg sm:text-xl font-extrabold text-[#D4AF37]">
                       {car.price}
                     </span>
                   </div>
 
                   <a
                     href={`https://wa.me/${phone}?text=${encodeURIComponent(
-                      `Olá, Sr. Alexandre! Gostaria de saber mais informações e simular financiamento para o veículo: ${car.name} (${car.price}).`
+                      `Olá, Sr. Alexandre! Gostaria de saber mais informações e simular financiamento para o veículo: ${car.name} (${car.year}) anunciado por ${car.price} com laudo periciado.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B45309] px-4 py-2.5 text-xs font-extrabold text-[#09090B] transition hover:scale-105 active:scale-95"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B45309] px-3.5 py-2 text-xs font-extrabold text-[#09090B] transition hover:scale-105 active:scale-95 shadow-md shadow-[#D4AF37]/15"
                   >
                     Proposta
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -657,9 +796,9 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
           </div>
 
           {/* Showroom Subtitle CTA */}
-          <div className="mt-12 rounded-3xl border border-[#D4AF37]/25 bg-[#141419] p-6 text-center text-xs sm:text-sm text-[#D1D5DB] max-w-2xl mx-auto">
+          <div className="mt-14 rounded-3xl border border-[#D4AF37]/25 bg-[#141419] p-6 text-center text-xs sm:text-sm text-[#D1D5DB] max-w-2xl mx-auto">
             <p>
-              Procurando algum modelo específico que não está na lista? O <strong>Sr. Alexandre</strong> localiza o veículo ideal para você através da nossa rede de captação qualificada.
+              Procurando algum modelo específico que não está na lista? O <strong>Sr. Alexandre</strong> localiza o veículo ideal para você através da nossa rede de captação qualificada com laudo 100% periciado.
             </p>
             <a
               href={`https://wa.me/${phone}?text=${encodeURIComponent("Olá, Sr. Alexandre! Estou procurando um carro específico e gostaria da sua consultoria.")}`}
@@ -673,6 +812,109 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
         </div>
       </section>
 
+      {/* MODAL DE FICHA TÉCNICA E FOTO AMPLIADA */}
+      {selectedVehicleModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in-50 duration-200">
+          <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-[#D4AF37]/50 bg-[#121216] shadow-2xl">
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedVehicleModal(null)}
+              className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white hover:text-[#D4AF37] border border-white/10"
+              aria-label="Fechar"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            {/* Modal Image */}
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-black">
+              <img
+                src={selectedVehicleModal.image}
+                alt={selectedVehicleModal.name}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute top-4 left-4">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#09090B]/90 backdrop-blur-md px-3 py-1 text-xs font-bold text-[#FDE68A] border border-[#D4AF37]/40">
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF37]" />
+                  {selectedVehicleModal.tag}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 sm:p-7">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h3 className="font-[Outfit,sans-serif] text-xl sm:text-2xl font-bold text-white">
+                    {selectedVehicleModal.name}
+                  </h3>
+                  <div className="mt-1 flex items-center gap-3 text-xs text-[#D1D5DB]">
+                    <span className="text-[#D4AF37] font-semibold">{selectedVehicleModal.year}</span>
+                    <span>•</span>
+                    <span>{selectedVehicleModal.km}</span>
+                    <span>•</span>
+                    <span>{selectedVehicleModal.transmission}</span>
+                    <span>•</span>
+                    <span>{selectedVehicleModal.fuel}</span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <span className="text-[10px] text-[#A1A1AA] uppercase block font-semibold">Preço Especial</span>
+                  <span className="font-[Outfit,sans-serif] text-2xl font-extrabold text-[#D4AF37]">
+                    {selectedVehicleModal.price}
+                  </span>
+                </div>
+              </div>
+
+              {/* Specs Grid in Modal */}
+              <div className="mt-5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
+                  Destaques e Opcionais Inclusos:
+                </h4>
+                <div className="mt-2.5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {selectedVehicleModal.specs.map((s, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-1.5 rounded-lg bg-[#09090B] px-3 py-2 text-xs text-[#E2E8F0] border border-[#D4AF37]/15"
+                    >
+                      <CheckCircle className="h-3.5 w-3.5 text-[#D4AF37] shrink-0" />
+                      <span className="truncate">{s}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Warranty note */}
+              <div className="mt-4 rounded-xl bg-[#09090B]/60 p-3 text-[11px] text-[#A1A1AA] border border-[#D4AF37]/10 flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-[#D4AF37] shrink-0" />
+                <span>Garantia legal de 90 dias de motor e câmbio + laudo cautelar entregue em mãos.</span>
+              </div>
+
+              {/* CTAs */}
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <a
+                  href={`https://wa.me/${phone}?text=${encodeURIComponent(
+                    `Olá, Sr. Alexandre! Vi a ficha técnica e fotos do veículo: ${selectedVehicleModal.name} (${selectedVehicleModal.year}) por ${selectedVehicleModal.price} no site da Garagem 21. Gostaria de agendar uma visita ou simular financiamento!`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B45309] py-3.5 text-sm font-extrabold text-[#09090B] shadow-lg shadow-[#D4AF37]/20 hover:scale-[1.02] active:scale-98 transition"
+                >
+                  <MessageCircle className="h-4 w-4 text-[#09090B]" />
+                  Negociar com Sr. Alexandre no WhatsApp
+                </a>
+                <button
+                  onClick={() => setSelectedVehicleModal(null)}
+                  className="rounded-xl border border-[#D4AF37]/30 bg-[#141419] px-5 py-3 text-xs font-bold text-white hover:bg-[#1f1f26]"
+                >
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 7. SIMULADOR DE FINANCIAMENTO & TROCA VIA WHATSAPP */}
       <section id="simulador" className="py-16 md:py-24 bg-[#09090B]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
@@ -683,7 +925,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                 Simulação Sem Compromisso
               </span>
 
-              <h2 className="mt-3 font-['Outfit',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">
+              <h2 className="mt-3 font-[Outfit,sans-serif] text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">
                 Simule Financiamento ou Troca
               </h2>
 
@@ -719,7 +961,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                   >
                     <option value="SUV Premium / Médio">SUV Premium / Médio (Compass, Corolla Cross, HR-V)</option>
                     <option value="Picape 4x4 Diesel">Picape 4x4 Diesel (Hilux, Ranger, Toro)</option>
-                    <option value="Sedan Executivo">Sedan Executivo (Corolla, Civic, Jetta)</option>
+                    <option value="Sedan Executivo">Sedan Executivo (Corolla, Civic, BMW 320i)</option>
                     <option value="Hatch Econômico / Novo">Hatch Econômico (Polo, Yaris, HB20)</option>
                     <option value="Outro Modelo Específico">Outro Modelo Específico</option>
                   </select>
@@ -795,7 +1037,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
             <span className="text-xs font-extrabold tracking-[0.2em] text-[#D4AF37] uppercase">
               Credibilidade Imbatível
             </span>
-            <h2 className="mt-2 font-['Outfit',sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-2 font-[Outfit,sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
               231 Clientes e Nota Máxima no Google
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[#A1A1AA]">
@@ -816,7 +1058,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
                     ))}
                   </div>
 
-                  <p className="font-['Outfit',sans-serif] text-base font-bold text-[#FDE68A] mb-2">
+                  <p className="font-[Outfit,sans-serif] text-base font-bold text-[#FDE68A] mb-2">
                     "{test.highlight}"
                   </p>
 
@@ -849,7 +1091,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
               <span className="text-xs font-extrabold tracking-[0.2em] text-[#D4AF37] uppercase">
                 Venha Conhecer o Showroom
               </span>
-              <h2 className="mt-2 font-['Outfit',sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-2 font-[Outfit,sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
                 Tradição no Polo Automotivo da Várzea
               </h2>
               <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#D1D5DB]">
@@ -932,7 +1174,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
             <span className="text-xs font-extrabold tracking-[0.2em] text-[#D4AF37] uppercase">
               Tire Suas Dúvidas
             </span>
-            <h2 className="mt-2 font-['Outfit',sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-2 font-[Outfit,sans-serif] text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
               Perguntas Frequentes
             </h2>
             <p className="mt-3 text-sm text-[#A1A1AA]">
@@ -948,7 +1190,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
               >
                 <button
                   onClick={() => setFaqOpen(faqOpen === idx ? null : idx)}
-                  className="flex w-full items-center justify-between p-5 text-left font-['Outfit',sans-serif] text-base font-bold text-white hover:text-[#D4AF37] transition-colors"
+                  className="flex w-full items-center justify-between p-5 text-left font-[Outfit,sans-serif] text-base font-bold text-white hover:text-[#D4AF37] transition-colors"
                 >
                   <span className="pr-4">{item.q}</span>
                   <ChevronDown
@@ -974,7 +1216,7 @@ Vim pelo site oficial e gostaria de falar com o Sr. Alexandre sobre as condiçõ
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {/* Brand column */}
             <div>
-              <span className="font-['Outfit',sans-serif] text-xl font-extrabold text-white block">
+              <span className="font-[Outfit,sans-serif] text-xl font-extrabold text-white block">
                 Garagem 21 Collection
               </span>
               <span className="text-xs font-bold text-[#D4AF37] block mt-0.5 tracking-wider uppercase">
